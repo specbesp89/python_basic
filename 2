@@ -14,18 +14,21 @@
 
 """
 from abc import ABC, abstractmethod
-class Clothes:
+
+
+class Clothes(ABC):
     def __init__(self, size, height):
         self.size = size
         self.height = height
 
-    def v_tissue_consumption(self): #Расчет расхода ткани от размера
+    def v_tissue_consumption(self):  # Расчет расхода ткани от размера
         return self.size / 6.5 + 0.5
 
-    def h_tissue_consumption(self):#Расчет расхода ткани от роста
+    def h_tissue_consumption(self):  # Расчет расхода ткани от роста
         return self.height * 2 + 0.3
-
-
+    @abstractmethod
+    def my_fuc(self):
+        pass
 
 class Coat(Clothes):
     def __init__(self, size, height, model):
@@ -40,6 +43,9 @@ class Coat(Clothes):
         return f'Расход ткани на все пальто {self.model} - {self.coat_consumption} у.е.'
 
 
+    def my_fuc(self):
+        pass
+
 class Jacket(Clothes):
     def __init__(self, size, height, model):
         super().__init__(size, height)
@@ -49,29 +55,24 @@ class Jacket(Clothes):
 
     def __add__(self, other):
         return f'Общий расход ткани на все костюмы - {self.j_consumption + other.j_consumption} у.е.'
+
     def __str__(self):
         return f'Расход ткани на костюм {self.model} - {self.j_consumption} у.е.'
-
-
-
-
-
-
+    def my_fuc(self):
+        pass
 
 coat = Coat(50, 1.85, 'GUCCI')
 coat2 = Coat(55, 2, 'GUCCI2')
 
 print(coat)
 print(coat2)
-print(coat+coat2)
+print(coat + coat2)
 print()
-
-
-
 
 jacket = Jacket(48, 1.8, 'Hugo Boss')
 jacket2 = Jacket(50, 1.5, 'Brioni')
 
 print(jacket)
 print(jacket2)
-print(jacket+jacket2)
+print(jacket + jacket2)
+
