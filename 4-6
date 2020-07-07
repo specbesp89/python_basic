@@ -1,0 +1,105 @@
+# 4	Начните работу над проектом «Склад оргтехники». Создайте класс, описывающий склад.
+# А также класс «Оргтехника», который будет базовым для классов-наследников.
+# Эти классы — конкретные типы оргтехники (принтер, сканер, ксерокс).
+# В базовом классе определить параметры, общие для приведенных типов.
+# В классах-наследниках реализовать параметры, уникальные для каждого типа оргтехники.
+
+# 5) Продолжить работу над первым заданием.
+# Разработать методы, отвечающие за приём оргтехники на склад и передачу в определенное подразделение компании.
+# Для хранения данных о наименовании и количестве единиц оргтехники, а также других данных,
+# можно использовать любую подходящую структуру, например словарь.
+
+# 6) Продолжить работу над вторым заданием. Реализуйте механизм валидации вводимых пользователем данных.
+# Например, для указания количества принтеров, отправленных на склад, нельзя использовать строковый тип данных.
+# Подсказка: постарайтесь по возможности реализовать в проекте «Склад оргтехники» максимум возможностей,
+# изученных на уроках по ООП.
+from abc import ABC, abstractmethod
+from statistics import mean
+
+
+class Mtr(ABC):
+    my_store = []
+    all_count = []
+    middle_price = []
+
+
+
+    def __init__(self, name, price, count, *args):
+        self.name = name
+        self.price = price
+        self.count = count
+        self.tech = {'Модель': self.name, 'Цена за ед': self.price, 'Количество': int(self.count)}
+
+    @abstractmethod
+    def for_store(self):  # Поступление на склад
+
+        my_tech = {'Модель': self.name, 'Цена за ед': self.price, 'Количество': self.count}
+        self.tech.update(my_tech)
+        self.my_store.append(self.tech)
+
+    @abstractmethod
+    def retirement(self):  # Выбытие со склада
+        my_tech = {'Модель': self.name, 'Цена за ед': self.price, 'Количество': self.count}
+        self.tech.update(my_tech)
+        self.my_store.remove(self.tech)
+
+
+class Office_equipment(Mtr):
+    def __init__(self, name, price, count, inv_num, *args):
+        super().__init__(name, price, count, *args)
+        self.inv_num = inv_num
+
+    def for_store(self):  # Поступление на склад
+        my_tech = {'Модель': self.name, 'Цена за ед': self.price, 'Количество': self.count,
+                   'Инвентарный номер': self.inv_num}
+        self.tech.update(my_tech)
+        self.my_store.append(self.tech)
+
+    def retirement(self):  # Выбытие со склада
+        my_tech = {'Модель': self.name, 'Цена за ед': self.price, 'Количество': self.count,
+                   'Инвентарный номер': self.inv_num}
+        self.tech.update(my_tech)
+        self.my_store.remove(self.tech)
+
+
+class Stationery(Mtr):
+    def __init__(self, name, price, count, color, *args):
+        super().__init__(name, price, count, *args)
+        self.color = color
+
+    def for_store(self):  # Поступление на склад
+        my_tech = {'Модель': self.name, 'Цена за ед': self.price, 'Количество': self.count,
+                   'Цвет': self.color}
+        self.tech.update(my_tech)
+        self.my_store.append(self.tech)
+
+    def retirement(self):  # Выбытие со склада
+        my_tech = {'Модель': self.name, 'Цена за ед': self.price, 'Количество': self.count,
+                   'Цвет': self.color}
+        self.tech.update(my_tech)
+        self.my_store.remove(self.tech)
+
+
+m1 = Office_equipment('Xerox', 20000, 15, 'инв-000001')
+m2 = Office_equipment('Samsung', 1100, 2, 'инв-000002')  # для примера - заведена ошибочная позиция
+m3 = Office_equipment('Samsung', 11000, 2, 'инв-000002')
+
+s1 = Stationery('Ручка Parker Premier', 18000, 20, 'Синий')
+
+m1.for_store()  # отражение проводки поступления
+m2.for_store()  # отражение проводки поступления
+m3.for_store()  # отражение проводки поступления
+m2.retirement()  # отражение сторнировочной проводки
+s1.for_store()  # отражение проводки поступления
+
+try:
+    for el in range(len(Mtr.my_store)):
+        Mtr.all_count.append(int(Mtr.my_store[el].get('Количество')))
+        Mtr.middle_price.append(int(Mtr.my_store[el].get('Цена за ед')))
+
+    print(f'Итого товаров на складе - {sum(Mtr.all_count)} шт.')
+    print(f'Итого средняя цена единицы товара на складе - {round(mean(Mtr.middle_price), 2)} у.е.')
+    print(f'Баланс склада - {Mtr.my_store}')
+
+except ValueError:
+    print('!!!В поле числового введено значения введены не корректные данные!!!')
