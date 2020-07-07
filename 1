@@ -1,0 +1,37 @@
+# 1)	Реализовать класс «Дата»,
+# функция-конструктор которого должна принимать дату в виде строки формата «день-месяц-год».
+# В рамках класса реализовать два метода. Первый, с декоратором @classmethod, должен извлекать число,
+# месяц, год и преобразовывать их тип к типу «Число».
+# Второй, с декоратором @staticmethod, должен проводить валидацию числа,
+# месяца и года (например, месяц — от 1 до 12). Проверить работу полученной структуры на реальных данных.
+
+class Data:
+    def __init__(self, result_data):
+        self.result_data = result_data
+
+    @classmethod
+    def d_m_y(cls, result_data):
+        data = []
+        for dat in result_data.split('-'):
+            data.append(int(dat))
+        return data
+
+    @staticmethod
+    def valid(data):
+
+        if 1 <= data[0] <= 31:
+            if 1 <= data[1] <= 12:
+                if 2020 >= data[2] >= 0:
+                    return f'Дата введена корректно'
+                else:
+                    return f'Неправильный год'
+            else:
+                return f'Введен неправильный месяц'
+        else:
+            return f'Введен неправильный день'
+
+
+
+n = Data.d_m_y('31-12-2020')
+print(Data.valid(n))
+print(f'текущая дата - {n}')
